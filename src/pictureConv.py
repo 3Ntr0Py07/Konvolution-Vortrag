@@ -17,6 +17,6 @@ def convolutePictureRGB(path, kernel:np.ndarray):
     print(sh)
     print(output.shape)
     output = Image.fromarray(np.uint8(output))
-    output.save("Outputs/Img.bmp", "BMP")
+    output.save("src/Outputs/Img.bmp", "BMP")
 
-convolutePictureRGB("IMG_1646.JPG",list2)
+convolutePictureRGB("src/img.jpg",list2)

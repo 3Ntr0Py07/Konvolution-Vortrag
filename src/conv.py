@@ -17,28 +17,28 @@ def convolve1D(list1: list[float], list2: list[float]) -> list[float]:
             convolution[l] += list1[l - i + len(list2)] * list2[i]
     return convolution
 
-def convolve2D(signal: np.ndarray, kernel: np.ndarray, padding = 0) -> np.ndarray:
+def convolve2D(signal: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     '''convolve two 2-dimensional lists of floats \n
     kernel must be smaller than signal in both dimensions'''
 
-    xKernShape = kernel.shape[0]
-    yKernShape = kernel.shape[1]
-    xImgShape = signal.shape[0]
-    yImgShape = signal.shape[1]
+    xKernelShape = kernel.shape[0]
+    yKernelShape = kernel.shape[1]
+    xSignalShape = signal.shape[0]
+    ySignalShape = signal.shape[1]
 
-    xOutput = int(((xImgShape - xKernShape + 2 * padding)) + 1)
-    yOutput = int(((yImgShape - yKernShape + 2 * padding)) + 1)
-    output = np.zeros((xOutput, yOutput))
+    padding = xKernelShape - 1
 
-    if padding != 0:
-        signalPadded = np.zeros((signal.shape[0] + padding*2, signal.shape[1] + padding*2))
-        signalPadded[int(padding):int(-1 * padding), int(padding):int(-1 * padding)] = signal
-    else:
-        signalPadded = signal
+    signalPadded = np.zeros((xSignalShape + padding*2, ySignalShape + padding*2))
+    signalPadded[int(padding):int(-1 * padding), int(padding):int(-1 * padding)] = signal
+
+    output = np.zeros((signalPadded.shape[0] - padding, signalPadded.shape[1] - padding))
 
     for y in range(signalPadded.shape[1]):
         for x in range(signalPadded.shape[0]):
-            output[x, y] = (kernel * signalPadded[x: x + xKernShape, y: y + yKernShape]).sum()
+            try:
+                output[x, y] = (kernel * signalPadded[x: x + xKernelShape, y: y + yKernelShape]).sum()
+            except:
+                break
 
     return output
 
